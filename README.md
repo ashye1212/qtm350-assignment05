@@ -6,7 +6,7 @@
 ## Quarto Reports & Slides
 - **[HTML Report](https://ashye1212.github.io/qtm350-assignment05/report.html)** (Published via GitHub Pages)
 - **[Presentation Slides (Reveal.js)](https://ashye1212.github.io/qtm350-assignment05/slides.html)** (Published via GitHub Pages)
-- **PDF Report**: Stored in the repository (`report.pdf`)
+- **PDF Report**: Stored in the repository [`report.pdf`](report.pdf)
 
 ## Repository Contents
 - All **`.qmd` files** used for report and presentation generation.
