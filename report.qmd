@@ -1,0 +1,217 @@
+---
+title: "World Development Indicators Analysis"
+author: "Lydia Lingyun Zhang"
+date: today
+format:
+  html: default
+  pdf: default
+bibliography: references.bib
+execute:
+  echo: false
+  warning: false
+---
+
+# Introduction
+
+In this report, we analyze a sample of the **World Development Indicators dataset** published by the [World Bank](https://databank.worldbank.org/source/world-development-indicators) [@WorldBank2022], focusing on one year (2022). 
+
+Our analysis centers on four key variables: country, GDP per capita, life expectancy, and total population. We begin by conducting a **data quality assessment**, identifying missing values and handling them appropriately. To determine the best imputation method, we examine the **distribution of GDP per Capita and Life Expectancy** using histogram plots (see Figure @fig-dist-gdp-lifeexp). Based on the distributions, we apply **median imputation** for GDP per Capita (due to skewness) and **mean imputation** for Life Expectancy (assuming a normal distribution).
+
+After data cleaning, we proceed with **exploratory data analysis (EDA)** using visualizations:1) **A Bar Chart** displaying the **Top 10 countries by GDP per Capita** to identify the wealthiest nations (see Figure @fig-gdp-top10);2) **A Scatter Plot** exploring the **relationship between GDP per Capita and Life Expectancy**, assessing economic prosperity's impact on public health (see Figure @fig-gdp-lifeexp). This relationship has been extensively studied, with findings suggesting that higher GDP per capita is often associated with increased life expectancy [@genus2019].
+
+Table @tbl-summary-stats provides key summary statistics for GDP per Capita, Life Expectancy, and Total Population across 217 countries. Specifically, we found that the mean GDP per capita is $20,345.71, with a high standard deviation of $31,308.94, indicating substantial economic disparities among nations. While some countries report extremely low GDP per capita values, others exhibit significantly higher figures, contributing to the observed variation. Secondly, life expectancy averages 72.42 years, ranging from 53 to 85.38 years, reflecting disparities in healthcare access and overall living conditions. This wide range underscores persistent global health inequalities. Also, the mean total population is 36.5 million, but the distribution is highly skewed due to populous nations such as China (1.4 billion) and smaller island states with significantly lower populations. 
+
+
+---
+
+## Load the Dataset & Quality Check
+```{python}
+#| echo: true 
+
+import pandas as pd
+
+# Load the dataset
+df = pd.read_csv("data/wdi.csv")
+
+# Display the first few rows
+display(df.head())
+
+# Check for dataset info 
+print(df.info())
+```
+
+## Exploratory Data Analysis
+After reviewing the dataset, we decided to choose four indicators for further exploratory data analysis:  `country`, `gdp_per_capita`, `life_expectancy`, and `total_population`. This section provides an overview of these indicators and their distributions.
+```{python}
+#| echo: true 
+
+df_selected = df[["country", "gdp_per_capita", "life_expectancy", "total_population"]]
+
+df_selected.head()
+```
+
+---
+
+## Data Quality Check
+
+Firstly, we check for missing values and duplicate rows.
+
+**Findings:**
+- No duplicated rows.
+- Missing values in GDP per Capita (6.45%) and Life Expectancy (3.69%).
+
+```{python}
+#| echo: true 
+
+# Check for missing values and calculate percentage
+missing_values = df_selected.isnull().sum()
+missing_percentage = (missing_values / len(df_selected)) * 100
+
+# Check for duplicated rows
+duplicate_count = df_selected.duplicated().sum()
+
+# Create a summary table
+missing_summary = pd.DataFrame({
+    "Missing Values": missing_values,
+    "Missing Percentage (%)": missing_percentage
+})
+
+# Display results
+print("Missing Values Summary")
+display(missing_summary)
+
+print(f"\nNumber of Duplicate Rows: {duplicate_count}")
+```
+
+---
+
+## Distribution Analysis Before Cleaning
+
+To decide how to handle missing values, we first look at the distributions of GDP per Capita and Life Expectancy using histograms.
+
+Our analysis shows:1)GDP per Capita is highly skewed, meaning there are extreme values that could distort the average. Because of this, we use median imputation, which is less affected by outliers; 2)Life Expectancy follows a roughly normal distribution, so mean imputation is the best choice since the mean is a good representation of the data in this case.
+
+```{python}
+#| echo: false
+#| fig-cap: "Distribution of GDP per Capita and Life Expectancy Before Cleaning. Data Source: World Bank [@WorldBank2022]."
+#| label: fig-dist-gdp-lifeexp
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Set up the figure layout
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+# Histogram for GDP per Capita
+sns.histplot(df_selected["gdp_per_capita"].dropna(), bins=30, kde=True, ax=axes[0], color="blue")
+axes[0].set_title("Distribution of GDP per Capita")
+axes[0].set_xlabel("GDP per Capita (USD)")
+
+# Histogram for Life Expectancy
+sns.histplot(df_selected["life_expectancy"].dropna(), bins=30, kde=True, ax=axes[1], color="green")
+axes[1].set_title("Distribution of Life Expectancy")
+axes[1].set_xlabel("Life Expectancy (Years)")
+
+plt.tight_layout()
+plt.show()
+```
+
+---
+
+## Handling Missing Values
+
+Since missing values are present in GDP per Capita (6.45%) and Life Expectancy (3.69%), to avoid data loss, we impute missing values as follows:1)for **GDP per Capita**, we replaced with the median value;2) for **Life Expectancy**, we replaced with the mean value.
+
+```{python}
+#| echo: true 
+
+# Impute missing values
+df_selected["gdp_per_capita"].fillna(df_selected["gdp_per_capita"].median(), inplace=True)
+df_selected["life_expectancy"].fillna(df_selected["life_expectancy"].mean(), inplace=True)
+
+# Create a cleaned dataset
+df_clean = df_selected.copy()
+
+display(df_clean.head())
+```
+
+---
+## Key Statistics Table
+
+After handling missing values, we review the dataset and its key statistics.Table @tbl-summary-stats is a summary of key statistics for the cleaned dataset:
+
+```{python}
+#| tbl-cap: "Summary Statistics for Key Indicators (2022). Data Source: World Bank [@WorldBank2022]."
+#| label: tbl-summary-stats
+
+summary_stats = df_clean.describe().T
+summary_stats.style.format("{:.2f}")
+```
+
+---
+
+## Exploratory Visualizations
+
+Now that we’ve handled missing values and examined distributions, let’s explore key relationships between indicators using different visualizations.
+
+To better understand the key indicators, we use:
+1. A Bar Chart (Top 10 countries by GDP per Capita).
+2. A Scatter Plot (GDP per Capita vs. Life Expectancy).
+
+---
+
+### **Top 10 Countries by GDP per Capita **
+
+```{python}
+#| echo: false 
+#| fig-cap: "Top 10 Countries by GDP per Capita (2022). Data Source: World Bank [@WorldBank2022]."
+#| label: fig-gdp-top10
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Get top 10 countries by GDP per capita
+top_gdp = df_clean.sort_values("gdp_per_capita", ascending=False).head(10)
+
+# Create figure
+plt.figure(figsize=(10, 5))
+sns.barplot(x="gdp_per_capita", y="country", data=top_gdp, palette="viridis")
+
+# Labels and title
+plt.xlabel("GDP per Capita (USD)")
+plt.ylabel("Country")
+plt.title("Top 10 Countries by GDP per Capita (2022)")
+
+# Show plot
+plt.show()
+```
+
+---
+
+### **Relationship Between GDP per Capita and Life Expectancy **
+
+```{python}
+#| echo: false
+#| fig-cap: "Relationship Between GDP per Capita and Life Expectancy. Data Source: World Bank [@WorldBank2022]."
+#| label: fig-gdp-lifeexp
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(8, 5))
+sns.scatterplot(x=df_clean["gdp_per_capita"], y=df_clean["life_expectancy"], alpha=0.6, color="blue")
+plt.xscale("log")  # Log transformation for better visualization
+plt.xlabel("GDP per Capita (Log Scale, USD)")
+plt.ylabel("Life Expectancy (Years)")
+plt.title("GDP per Capita vs. Life Expectancy (2022)")
+plt.show()
+```
+
+---
+
+## Conclusion
+
+In this report, we analyzed the World Development Indicators dataset, focusing on GDP per capita, life expectancy, and total population. Our findings highlight the relationship between economic prosperity and public health, as well as the distribution of wealth across countries. The visualizations and statistical summaries provide a comprehensive overview of the data, enabling further insights into global development trends.
+
+---
