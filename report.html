@@ -143,7 +143,7 @@ div.csl-indent {
 <hr>
 <section id="load-the-dataset-quality-check" class="level2">
 <h2 class="anchored" data-anchor-id="load-the-dataset-quality-check">Load the Dataset &amp; Quality Check</h2>
-<div id="e310d4fa" class="cell" data-execution_count="1">
+<div id="363369b9" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the dataset</span></span>
@@ -298,11 +298,11 @@ None</code></pre>
 <section id="exploratory-data-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="exploratory-data-analysis">Exploratory Data Analysis</h2>
 <p>After reviewing the dataset, we decided to choose four indicators for further exploratory data analysis: <code>country</code>, <code>gdp_per_capita</code>, <code>life_expectancy</code>, and <code>total_population</code>. This section provides an overview of these indicators and their distributions.</p>
-<div id="b5a1eed4" class="cell" data-execution_count="2">
+<div id="75d6b101" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df_selected <span class="op">=</span> df[[<span class="st">"country"</span>, <span class="st">"gdp_per_capita"</span>, <span class="st">"life_expectancy"</span>, <span class="st">"total_population"</span>]]</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df_selected.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div class="cell-output cell-output-display" data-execution_count="26">
 <div>
 
 
@@ -364,7 +364,7 @@ None</code></pre>
 <h2 class="anchored" data-anchor-id="data-quality-check">Data Quality Check</h2>
 <p>Firstly, we check for missing values and duplicate rows.</p>
 <p><strong>Findings:</strong> - No duplicated rows. - Missing values in GDP per Capita (6.45%) and Life Expectancy (3.69%).</p>
-<div id="4296b6f0" class="cell" data-execution_count="3">
+<div id="83e28db8" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for missing values and calculate percentage</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>missing_values <span class="op">=</span> df_selected.isnull().<span class="bu">sum</span>()</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>missing_percentage <span class="op">=</span> (missing_values <span class="op">/</span> <span class="bu">len</span>(df_selected)) <span class="op">*</span> <span class="dv">100</span></span>
@@ -454,7 +454,7 @@ Figure&nbsp;1: Distribution of GDP per Capita and Life Expectancy Before Cleanin
 <section id="handling-missing-values" class="level2">
 <h2 class="anchored" data-anchor-id="handling-missing-values">Handling Missing Values</h2>
 <p>Since missing values are present in GDP per Capita (6.45%) and Life Expectancy (3.69%), to avoid data loss, we impute missing values as follows:1)for <strong>GDP per Capita</strong>, we replaced with the median value;2) for <strong>Life Expectancy</strong>, we replaced with the mean value.</p>
-<div id="7f2f7b42" class="cell" data-execution_count="5">
+<div id="87a2408e" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Impute missing values</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>df_selected[<span class="st">"gdp_per_capita"</span>].fillna(df_selected[<span class="st">"gdp_per_capita"</span>].median(), inplace<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>df_selected[<span class="st">"life_expectancy"</span>].fillna(df_selected[<span class="st">"life_expectancy"</span>].mean(), inplace<span class="op">=</span><span class="va">True</span>)</span>
@@ -531,57 +531,57 @@ Figure&nbsp;1: Distribution of GDP per Capita and Life Expectancy Before Cleanin
 Table&nbsp;1: Summary Statistics for Key Indicators (2022). Data Source: World Bank <span class="citation" data-cites="WorldBank2022">(<a href="#ref-WorldBank2022" role="doc-biblioref">Bank 2022</a>)</span>.
 </figcaption>
 <div aria-describedby="tbl-summary-stats-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display" data-execution_count="6">
+<div class="cell-output cell-output-display" data-execution_count="30">
 <style type="text/css">
 </style>
 
-<table id="T_bfabc" class="do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_4728c" class="do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
 <th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
-<th id="T_bfabc_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">count</th>
-<th id="T_bfabc_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">mean</th>
-<th id="T_bfabc_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">std</th>
-<th id="T_bfabc_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">min</th>
-<th id="T_bfabc_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">25%</th>
-<th id="T_bfabc_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">50%</th>
-<th id="T_bfabc_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">75%</th>
-<th id="T_bfabc_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">max</th>
+<th id="T_4728c_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">count</th>
+<th id="T_4728c_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">mean</th>
+<th id="T_4728c_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">std</th>
+<th id="T_4728c_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">min</th>
+<th id="T_4728c_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">25%</th>
+<th id="T_4728c_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">50%</th>
+<th id="T_4728c_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">75%</th>
+<th id="T_4728c_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">max</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_bfabc_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">gdp_per_capita</td>
-<td id="T_bfabc_row0_col0" class="data row0 col0">217.00</td>
-<td id="T_bfabc_row0_col1" class="data row0 col1">19522.60</td>
-<td id="T_bfabc_row0_col2" class="data row0 col2">30439.85</td>
-<td id="T_bfabc_row0_col3" class="data row0 col3">259.03</td>
-<td id="T_bfabc_row0_col4" class="data row0 col4">3012.22</td>
-<td id="T_bfabc_row0_col5" class="data row0 col5">7587.59</td>
-<td id="T_bfabc_row0_col6" class="data row0 col6">21508.40</td>
-<td id="T_bfabc_row0_col7" class="data row0 col7">240862.18</td>
+<td id="T_4728c_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">gdp_per_capita</td>
+<td id="T_4728c_row0_col0" class="data row0 col0">217.00</td>
+<td id="T_4728c_row0_col1" class="data row0 col1">19522.60</td>
+<td id="T_4728c_row0_col2" class="data row0 col2">30439.85</td>
+<td id="T_4728c_row0_col3" class="data row0 col3">259.03</td>
+<td id="T_4728c_row0_col4" class="data row0 col4">3012.22</td>
+<td id="T_4728c_row0_col5" class="data row0 col5">7587.59</td>
+<td id="T_4728c_row0_col6" class="data row0 col6">21508.40</td>
+<td id="T_4728c_row0_col7" class="data row0 col7">240862.18</td>
 </tr>
 <tr class="even">
-<td id="T_bfabc_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">life_expectancy</td>
-<td id="T_bfabc_row1_col0" class="data row1 col0">217.00</td>
-<td id="T_bfabc_row1_col1" class="data row1 col1">72.42</td>
-<td id="T_bfabc_row1_col2" class="data row1 col2">7.57</td>
-<td id="T_bfabc_row1_col3" class="data row1 col3">53.00</td>
-<td id="T_bfabc_row1_col4" class="data row1 col4">67.26</td>
-<td id="T_bfabc_row1_col5" class="data row1 col5">73.39</td>
-<td id="T_bfabc_row1_col6" class="data row1 col6">78.16</td>
-<td id="T_bfabc_row1_col7" class="data row1 col7">85.38</td>
+<td id="T_4728c_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">life_expectancy</td>
+<td id="T_4728c_row1_col0" class="data row1 col0">217.00</td>
+<td id="T_4728c_row1_col1" class="data row1 col1">72.42</td>
+<td id="T_4728c_row1_col2" class="data row1 col2">7.57</td>
+<td id="T_4728c_row1_col3" class="data row1 col3">53.00</td>
+<td id="T_4728c_row1_col4" class="data row1 col4">67.26</td>
+<td id="T_4728c_row1_col5" class="data row1 col5">73.39</td>
+<td id="T_4728c_row1_col6" class="data row1 col6">78.16</td>
+<td id="T_4728c_row1_col7" class="data row1 col7">85.38</td>
 </tr>
 <tr class="odd">
-<td id="T_bfabc_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">total_population</td>
-<td id="T_bfabc_row2_col0" class="data row2 col0">217.00</td>
-<td id="T_bfabc_row2_col1" class="data row2 col1">36536447.72</td>
-<td id="T_bfabc_row2_col2" class="data row2 col2">141058261.99</td>
-<td id="T_bfabc_row2_col3" class="data row2 col3">11312.00</td>
-<td id="T_bfabc_row2_col4" class="data row2 col4">808726.00</td>
-<td id="T_bfabc_row2_col5" class="data row2 col5">6465097.00</td>
-<td id="T_bfabc_row2_col6" class="data row2 col6">26069416.00</td>
-<td id="T_bfabc_row2_col7" class="data row2 col7">1417173173.00</td>
+<td id="T_4728c_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">total_population</td>
+<td id="T_4728c_row2_col0" class="data row2 col0">217.00</td>
+<td id="T_4728c_row2_col1" class="data row2 col1">36536447.72</td>
+<td id="T_4728c_row2_col2" class="data row2 col2">141058261.99</td>
+<td id="T_4728c_row2_col3" class="data row2 col3">11312.00</td>
+<td id="T_4728c_row2_col4" class="data row2 col4">808726.00</td>
+<td id="T_4728c_row2_col5" class="data row2 col5">6465097.00</td>
+<td id="T_4728c_row2_col6" class="data row2 col6">26069416.00</td>
+<td id="T_4728c_row2_col7" class="data row2 col7">1417173173.00</td>
 </tr>
 </tbody>
 </table>
@@ -597,8 +597,9 @@ Table&nbsp;1: Summary Statistics for Key Indicators (2022). Data Source: World B
 <p>Now that we’ve handled missing values and examined distributions, let’s explore key relationships between indicators using different visualizations.</p>
 <p>To better understand the key indicators, we use: 1. A Bar Chart (Top 10 countries by GDP per Capita). 2. A Scatter Plot (GDP per Capita vs.&nbsp;Life Expectancy).</p>
 <hr>
-<section id="top-10-countries-by-gdp-per-capita" class="level3">
-<h3 class="anchored" data-anchor-id="top-10-countries-by-gdp-per-capita"><strong>Top 10 Countries by GDP per Capita </strong></h3>
+</section>
+<section id="top-10-countries-by-gdp-per-capita" class="level2">
+<h2 class="anchored" data-anchor-id="top-10-countries-by-gdp-per-capita"><strong>Top 10 Countries by GDP per Capita </strong></h2>
 <div id="cell-fig-gdp-top10" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-display">
 <div id="fig-gdp-top10" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -615,8 +616,8 @@ Figure&nbsp;2: Top 10 Countries by GDP per Capita (2022). Data Source: World Ban
 </div>
 <hr>
 </section>
-<section id="relationship-between-gdp-per-capita-and-life-expectancy" class="level3">
-<h3 class="anchored" data-anchor-id="relationship-between-gdp-per-capita-and-life-expectancy"><strong>Relationship Between GDP per Capita and Life Expectancy </strong></h3>
+<section id="relationship-between-gdp-per-capita-and-life-expectancy" class="level2">
+<h2 class="anchored" data-anchor-id="relationship-between-gdp-per-capita-and-life-expectancy"><strong>Relationship Between GDP per Capita and Life Expectancy </strong></h2>
 <div id="cell-fig-gdp-lifeexp" class="cell" data-execution_count="8">
 <div class="cell-output cell-output-display">
 <div id="fig-gdp-lifeexp" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -632,7 +633,6 @@ Figure&nbsp;3: Relationship Between GDP per Capita and Life Expectancy. Data Sou
 </div>
 </div>
 <hr>
-</section>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
